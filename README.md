@@ -9,8 +9,8 @@ This database uses the Sqlite3 DBMS.
 To recreate the database, you first need to initialize the database file with the schema outlined in schema.sql. Next,
 the insert_data.sql file will populate and test the database with dummy data. Run the following commands to recreate and test the database:
 
-`sqlite3 events.db < schema.sql`
-`sqlite3 events.db < insert_data.sql`
+1. `sqlite3 events.db < schema.sql`
+2. `sqlite3 events.db < insert_data.sql`
 
 Make sure to run the files in the exact order given above.
 
