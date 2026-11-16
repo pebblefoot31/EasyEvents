@@ -1,3 +1,18 @@
+-- LEGACY FILE
+-- ------------------------------------------------------------
+-- This file is kept for historical / course-submission reference.
+-- The EasyEvents application now uses the SQL scripts located at:
+--   EasyEvents/server/sql/
+--
+-- Current runnable versions:
+--   - EasyEvents/server/sql/schema.sql
+--   - EasyEvents/server/sql/insert_data.sql
+--   - EasyEvents/server/sql/queries.sql
+--   - EasyEvents/server/sql/transaction.sql
+--
+-- To run the current scripts:
+--   ./run_queries.sh
+
 --Write a SELECT query using:
   --  WHERE
   -- ORDER BY
@@ -62,4 +77,3 @@ INNER JOIN Events
 
 --Write a query that uses the view created in Deliverable 3.
 -- The query should demonstrate why the view is useful.
-

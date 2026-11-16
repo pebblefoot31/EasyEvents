@@ -1,34 +1,35 @@
-# Easy Events: Event Planning 
+# Easy Events
 
-An application designed to serve event planners by providing capabilities for tracking vendors, venues, events, and more information.
+Easy Events is a small event management app for organizers. The dashboard summarizes upcoming events, vendor applications, registrations, and planning tasks. The Events page lists upcoming events and lets organizers add or remove them; the Applications page helps track all vendor applications.
 
-## Testing & Recreating 
+## Run locally
 
-This database uses the Sqlite3 DBMS. 
+1. Install [Node.js](https://nodejs.org/) if it is not already installed.
+2. From the project root, install dependencies:
 
-To recreate the database, you first need to initialize the database file with the schema outlined in schema.sql. Next,
-the insert_data.sql file will populate and test the database with dummy data. Run the following commands to recreate and test the database:
+   ```sh
+   npm install
+   ```
 
-1. `sqlite3 events.db < schema.sql`
-2. `sqlite3 events.db < insert_data.sql`
+3. Start the app:
 
-Make sure to run the files in the exact order given above.
+   ```sh
+   npm run dev
+   ```
 
-## View
+4. Open [http://localhost:5173](http://localhost:5173).
 
-This database uses the byCategory view, which is a series of SQL commands that enable the event planner to see the number of vendors registered for each event
-based on what business category they belong to. This relies on strategic joins between the Events, Vendors, and Registrations tables. Since event planners
-strive to have a balanced number of each type of vendor, it can be a good way to discern categories that are falling short in the number of registered
-vendors. 
+The development command starts the Vite frontend on port 5173 and the Express API on port 3001. Vite proxies `/api` requests to the API server.
 
-## Index
+## SQL safety and input validation
 
-The index supports search of a vendor by their business name. This is useful because it can help event planners quickly find contact details about
-a particular vendor if they remember the name of the business. It can also help the event planner get an idea of the kind of products that a vendor sells 
-(based on the name).
+API queries bind user-provided values with `better-sqlite3` placeholders; dynamic search conditions are assembled only from fixed SQL fragments. The API validates event and task fields, positive IDs and capacities, real event dates, search length, and allowed application statuses, and rejects malformed values with clear client errors.
 
-## Design Changes
+## Required operations for Deliverable 5
 
-I made a couple of minor changes to my database design. For the Vendors table, I added a TEXT column titled 'BusinessName' to store the name of the vendor's business. 
-I also changed the name of the 'date' column across Events and Applications tables to be more descriptive, updating the field name to 'EventDate' and 'AppDate' respectively.
-
+1. **Search or browse data:** Browse upcoming events on Events, or search and filter records on Applications.
+2. **Display related data:** Event and application views combine related venue, vendor, registration, and application details using database joins.
+3. **Add data:** Use the plus button on Events to add an event to the database.
+4. **Update or delete data:** Delete events by clicking on the delete trash can icon at the top right of each event card under the Events tab. 
+5. **Summary or report:** The dashboard reports event and application totals and vendor category summaries using SQL aggregates and grouping.
+6. **Additional operation:** Use Quick To-Do to create persistent planning tasks separate from event records.
