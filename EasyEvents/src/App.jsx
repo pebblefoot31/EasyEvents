@@ -19,6 +19,36 @@ const COLORS = [
   "#ead08e"
 ];
 
+async function readJsonOrThrow(response, label) {
+  const text = await response.text();
+  const trimmed = text.trim();
+
+  if (!trimmed) {
+    throw new Error(`${label} returned an empty response.`);
+  }
+
+  try {
+    return JSON.parse(trimmed);
+  } catch (error) {
+    throw new Error(`${label} returned invalid JSON.`);
+  }
+}
+
+async function readJsonOrDefault(response, defaultValue) {
+  const text = await response.text();
+  const trimmed = text.trim();
+
+  if (!trimmed) {
+    return defaultValue;
+  }
+
+  try {
+    return JSON.parse(trimmed);
+  } catch (error) {
+    return defaultValue;
+  }
+}
+
 function usePathname() {
   const [pathname, setPathname] = useState(
     () => window.location.pathname
@@ -279,8 +309,11 @@ function DashboardPage() {
         throw new Error("Unable to retrieve dashboard data.");
       }
 
-      const dashboardData = await dashboardResponse.json();
-      const taskData = await taskResponse.json();
+      const dashboardData = await readJsonOrThrow(
+        dashboardResponse,
+        "/api/dashboard"
+      );
+      const taskData = await readJsonOrDefault(taskResponse, []);
 
       setDashboard(dashboardData);
       setTasks(taskData);
@@ -316,7 +349,7 @@ function DashboardPage() {
         throw new Error("Unable to add task.");
       }
 
-      const task = await response.json();
+      const task = await readJsonOrThrow(response, "/api/tasks");
 
       setTasks(prev => [task, ...prev]);
       setNewTask("");
@@ -740,7 +773,7 @@ function ApplicationsPage() {
           throw new Error("Unable to retrieve applications.");
         }
 
-        const data = await response.json();
+        const data = await readJsonOrDefault(response, []);
         if (!cancelled) {
           setApplications(data);
         }
@@ -888,7 +921,7 @@ function EventsPage() {
         throw new Error("Unable to retrieve upcoming events.");
       }
 
-      setEvents(await response.json());
+      setEvents(await readJsonOrDefault(response, []));
 
     } catch (err) {
       setError(err.message);
@@ -901,7 +934,7 @@ function EventsPage() {
   async function loadVenues() {
     const response = await fetch("/api/venues");
     if (response.ok) {
-      setVenues(await response.json());
+      setVenues(await readJsonOrDefault(response, []));
     }
   }
 
